@@ -1,7 +1,7 @@
 export interface Film {
   id: number;
   name: string;
-  img: string;
+  // img: string;
   description: string;
   // weather
   temperature: number;

@@ -1,6 +1,8 @@
 import { City } from "./city";
 
 export class DataService {
+  data;
+  /*
   private data = [
     {
       located: "London",
@@ -40,15 +42,18 @@ export class DataService {
       }
     }
   ];
-
+*/
   loadData(locationName) {
     console.log("LOAD");
     this.loadFetch(locationName);
   }
 
   addData(name: string, dataWether) {
-    this.data.push({ located: name, weather: dataWether });
+    // this.data.push({ located: name, weather: dataWether });
+    this.data = { located: name, weather: dataWether };
+
     console.log("add new city:", this.data);
+    this.getData();
   }
 
   loadFetch(locationName = "Moskva") {

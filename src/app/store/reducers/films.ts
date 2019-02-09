@@ -11,33 +11,61 @@ export interface State {
 
 export const initialState: State = {
   ids: [1, 2, 3],
+  films: [
+    {
+      id: 1,
+      name: "Minsk",
+      description: `cold`,
+      temperature: 5,
+      wind: 10,
+      precipitation: 100
+    },
+    {
+      id: 2,
+      name: "Moskva",
+      description: "very cold",
+      temperature: 5,
+      wind: 10,
+      precipitation: 100
+    },
+    {
+      id: 3,
+      name: "Kiev",
+      description: "windy",
+
+      temperature: 5,
+      wind: 10,
+      precipitation: 100
+    }
+  ],
+  selected: null
+};
+/*
+export const initialState: State = {
+  ids: [1, 2, 3],
   films: {
     1: {
       id: 1,
-      name: "Interstellar",
-      description: `Interstellar is a 2014 epic science fiction film directed, co-written,
-       and co-produced by Christopher Nolan.`,
-      img: "https://goo.gl/8mG12t",
+      name: "Minsk",
+      description: `cold`,
+
       temperature: 5,
       wind: 10,
       precipitation: 100
     },
     2: {
       id: 2,
-      name: "Shutter Island",
-      description: `In 1954, a U.S. Marshal investigates the disappearance of a murderer,
-       who escaped from a hospital for the criminally insane.`,
-      img: "https://goo.gl/wfhjUF",
+      name: "Moskva",
+      description: "very cold",
       temperature: 5,
       wind: 10,
       precipitation: 100
     },
     3: {
       id: 3,
-      name: "The Grand Budapest Hotel",
-      description: `The adventures of Gustave H, a legendary concierge at a famous hotel the lobby boy
-       who becomes his most trusted friend.`,
-      img: "https://goo.gl/mDBt45",
+      name: "Kiev",
+      description: "windy",
+
       temperature: 5,
       wind: 10,
       precipitation: 100
@@ -45,6 +73,7 @@ export const initialState: State = {
   },
   selected: null
 };
+*/
 
 export function reducer(state = initialState, action: filmAction.Action) {
   switch (action.type) {
@@ -58,12 +87,12 @@ export function reducer(state = initialState, action: filmAction.Action) {
       console.log("ctalo-", {
         ...state,
         ids: [...state.ids, ids],
-        films: { ...state.films, ...films }
+        films: [...state.films, films]
       });
       return {
         ...state,
         ids: [...state.ids, ids],
-        films: { ...state.films, films }
+        films: [...state.films, films]
       };
     }
 

@@ -8,12 +8,11 @@ import { Film } from "../../models";
       <mat-card-header>
         <mat-card-title>{{ film.name }}</mat-card-title>
       </mat-card-header>
-      <img mat-card-image src="{{ film.img }}" alt="film image" />
       <mat-card-content>
-        <p>{{ film.description }}</p>
-        <p>{{ film.temperature }}</p>
-        <p>{{ film.wind }}</p>
-        <p>{{ film.precipitation }}</p>
+        <p>description:{{ film.description }}</p>
+        <p>temperature:{{ film.temperature }}</p>
+        <p>wind:{{ film.wind }}</p>
+        <p>precipitation:{{ film.precipitation }}</p>
       </mat-card-content>
     </mat-card>
   `,
