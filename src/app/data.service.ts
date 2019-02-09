@@ -44,7 +44,6 @@ export class DataService {
   loadData(locationName) {
     console.log("LOAD");
     this.loadFetch(locationName);
-    // this.addData(locationName);
   }
 
   addData(name: string, dataWether) {
@@ -54,7 +53,7 @@ export class DataService {
 
   loadFetch(locationName = "Moskva") {
     const keyApi = "&APPID=5baf5448a135ea4bda7e758af88b0136";
-    let url =
+    let url: string =
       "https://api.openweathermap.org/data/2.5/weather?q=" +
       locationName +
       keyApi;

@@ -1,14 +1,18 @@
 import { Component, OnInit } from "@angular/core";
 import { DataService } from "./data.service";
+import { Observable } from "rxjs";
+import { Action } from "@ngrx/store";
 
 @Component({
   selector: "app-root",
   //  templateUrl: "./app.component.html",
   template: `
     <div style="text-align:center">
+      <app-my-nav></app-my-nav>
       <h1>
         Weather!
       </h1>
+
       <p>Enter your location</p>
       <input type="text" [(ngModel)]="locationName" />
       <button (click)="addLocated(locationName)">Find</button>
@@ -25,6 +29,7 @@ import { DataService } from "./data.service";
           </li>
         </ul>
       </div>
+      <app-film></app-film>
     </div>
   `,
   styleUrls: ["./app.component.css"],
@@ -32,6 +37,7 @@ import { DataService } from "./data.service";
 })
 export class AppComponent implements OnInit {
   locationName: string;
+  items = {};
 
   constructor(private dataService: DataService) {}
 
