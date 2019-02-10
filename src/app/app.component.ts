@@ -12,7 +12,7 @@ import { Action } from "@ngrx/store";
       <h1>
         Weather!
       </h1>
-      <app-film></app-film>
+      <app-weather></app-weather>
     </div>
   `,
   styleUrls: ["./app.component.css"],

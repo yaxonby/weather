@@ -1,17 +1,25 @@
 import { Action } from "@ngrx/store";
-import * as filmAction from "../actions/films";
-
-import { Film } from "../../models";
+import * as cityAction from "../actions/weathers";
+import { City } from "../../models";
 
 export interface State {
   ids: number[];
-  films: { [id: number]: Film };
+  citys: [
+    {
+      id: number;
+      name: string;
+      description: string;
+      temperature: number;
+      wind: number;
+      precipitation: number;
+    }
+  ];
   selected: number;
 }
 
 export const initialState: State = {
   ids: [1, 2, 3],
-  films: [
+  citys: [
     {
       id: 1,
       name: "Minsk",
@@ -40,63 +48,28 @@ export const initialState: State = {
   ],
   selected: null
 };
-/*
-export const initialState: State = {
-  ids: [1, 2, 3],
-  films: {
-    1: {
-      id: 1,
-      name: "Minsk",
-      description: `cold`,
 
-      temperature: 5,
-      wind: 10,
-      precipitation: 100
-    },
-    2: {
-      id: 2,
-      name: "Moskva",
-      description: "very cold",
-      temperature: 5,
-      wind: 10,
-      precipitation: 100
-    },
-    3: {
-      id: 3,
-      name: "Kiev",
-      description: "windy",
-
-      temperature: 5,
-      wind: 10,
-      precipitation: 100
-    }
-  },
-  selected: null
-};
-*/
-
-export function reducer(state = initialState, action: filmAction.Action) {
+export function reducer(state = initialState, action: cityAction.Action) {
   switch (action.type) {
-    case filmAction.ADD_ONE: {
-      //const newFilm: Film = action.payload;
-      const newFilm = action.payload;
-      const { ids, films } = newFilm;
-      console.log("newFilm-", newFilm);
-      console.log("films-", films);
+    case cityAction.ADD_ONE: {
+      const newCity = action.payload;
+      const { ids, citys } = newCity;
+      console.log("newFilm-", newCity);
+      console.log("citys-", citys);
       console.log("state-", state);
       console.log("ctalo-", {
         ...state,
         ids: [...state.ids, ids],
-        films: [...state.films, films]
+        citys: [...state.citys, citys]
       });
       return {
         ...state,
         ids: [...state.ids, ids],
-        films: [...state.films, films]
+        citys: [...state.citys, citys]
       };
     }
 
-    case filmAction.DELETE_ONE: {
+    case cityAction.DELETE_ONE: {
       const id = action.payload;
 
       return {
@@ -104,13 +77,13 @@ export function reducer(state = initialState, action: filmAction.Action) {
         ids: [...state.ids].filter(function(item, i, arr) {
           return item.id !== id;
         }),
-        films: [...state.films].filter(function(item, i, arr) {
+        citys: [...state.citys].filter(function(item, i, arr) {
           return item.id !== id;
         })
       };
     }
 
-    case filmAction.SELECT: {
+    case cityAction.SELECT: {
       const id = action.payload;
       return {
         ...state,
@@ -124,5 +97,5 @@ export function reducer(state = initialState, action: filmAction.Action) {
 }
 
 export const getIds = (state: State) => state.ids;
-export const getFilms = (state: State) => state.films;
+export const getCitys = (state: State) => state.citys;
 export const getSelected = (state: State) => state.selected;

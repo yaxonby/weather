@@ -6,14 +6,14 @@ import {
   MetaReducer
 } from "@ngrx/store";
 
-import * as fromFilms from "./films";
+import * as fromCitys from "./weathers";
 
 export interface State {
-  films: fromFilms.State;
+  citys: fromCitys.State;
 }
 
 export const reducers: ActionReducerMap<State> = {
-  films: fromFilms.reducer
+  citys: fromCitys.reducer
 };
 
 export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
@@ -26,41 +26,31 @@ export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
 
 export const metaReducers: MetaReducer<State>[] = [logger];
 
-export const getFilmState = createFeatureSelector<fromFilms.State>("films");
+export const getCityState = createFeatureSelector<fromCitys.State>("citys");
 
 export const getIds = createSelector(
-  getFilmState,
-  fromFilms.getIds
+  getCityState,
+  fromCitys.getIds
 );
 
-export const getFilms = createSelector(
-  getFilmState,
-  fromFilms.getFilms
+export const getCitys = createSelector(
+  getCityState,
+  fromCitys.getCitys
 );
 
 export const getSelected = createSelector(
-  getFilmState,
-  fromFilms.getSelected
+  getCityState,
+  fromCitys.getSelected
 );
 
-export const getSelectedFilm = createSelector(
+export const getSelectedCity = createSelector(
   getSelected,
-  getFilms,
-  (selectedId, films) => {
+  getCitys,
+  (selectedId, citys) => {
     return {
-      ...films[selectedId]
+      ...citys[selectedId]
     };
   }
 );
 
-export const getAllFilms = createSelector(getFilms);
-/*
-export const getAllFilms = createSelector(
-  getIds,
-  getFilms,
-  (ids, films) => {
-    return ids.map(id => films[id]);
-  }
-);
-*/
-export const getAllCity = createSelector(getFilms);
+export const getAllCity = createSelector(getCitys);

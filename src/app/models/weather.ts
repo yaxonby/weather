@@ -1,9 +1,7 @@
-export interface Film {
+export interface City {
   id: number;
   name: string;
-  // img: string;
   description: string;
-  // weather
   temperature: number;
   wind: number;
   precipitation: number;

@@ -17,7 +17,7 @@ import { StoreModule } from "@ngrx/store";
 
 //mport { counterReducer } from "./app.reducer";
 //import { MyCounterComponent } from "./my-counter.component";
-import { FilmComponent } from "./film.component";
+import { WeatherComponent } from "./weather.component";
 
 import { FilmItemComponent } from "./components/film-item/film-item.component";
 import { FilmListComponent } from "./components/film-list/film-list.component";
@@ -37,7 +37,7 @@ export const MATERIAL_MODULES = [
     AppComponent,
     MyNavComponent,
     //  MyCounterComponent,
-    FilmComponent,
+    WeatherComponent,
     FilmItemComponent,
     FilmListComponent,
     FilmSelectedComponent

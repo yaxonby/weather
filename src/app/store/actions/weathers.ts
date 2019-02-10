@@ -1,9 +1,9 @@
 import { Action } from "@ngrx/store";
-import { Film } from "../../models";
+import { City } from "../../models";
 
-export const SELECT = "[Films] Select";
-export const ADD_ONE = "[Films] Add One";
-export const DELETE_ONE = "[Films] Delete One";
+export const SELECT = "[Citys] Select";
+export const ADD_ONE = "[Citys] Add One";
+export const DELETE_ONE = "[Citys] Delete One";
 
 export class Select implements Action {
   readonly type = SELECT;
@@ -20,7 +20,7 @@ export class DeleteOne implements Action {
 export class AddOne implements Action {
   readonly type = ADD_ONE;
 
-  constructor(public payload: Film) {}
+  constructor(public payload: City) {}
 }
 
 export type Action = AddOne | DeleteOne;

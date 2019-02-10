@@ -3,12 +3,12 @@ import { Observable } from "rxjs";
 import { Film } from "./models";
 import { Store } from "@ngrx/store";
 import * as fromRoot from "./store/reducers";
-import * as filmAction from "./store/actions/films";
+import * as cityAction from "./store/actions/weathers";
 import { DataService } from "./data.service";
 import { MatInkBar } from "@angular/material";
 
 @Component({
-  selector: "app-film",
+  selector: "app-weather",
   //templateUrl: "./film.component.html",
 
   template: `
@@ -20,24 +20,27 @@ import { MatInkBar } from "@angular/material";
     <input type="text" [(ngModel)]="locationName" />
     <button (click)="addLocated(locationName)">Find weather</button>
     <ul>
-      <li style="list-style-type:none" *ngFor="let film of (films$ | async)">
-        <span>{{ film.name }}, &nbsp;</span>
-        <span> &nbsp; {{ film.temperature }} °С, &nbsp;</span>
-        <span> &nbsp; {{ film.description }}, &nbsp;</span>
-        <span>ветер: &nbsp; {{ film.wind }}м/c, &nbsp;</span>
-        <span>осадки: &nbsp; {{ film.precipitation }}мм</span>
-        <span style="cursor:pointer" (click)="deleteLocated(film.id)"
+      <li
+        style="list-style-type:none"
+        *ngFor="let city of (listCitys$ | async)"
+      >
+        <span>{{ city.name }}, &nbsp;</span>
+        <span> &nbsp; {{ city.temperature }} °С, &nbsp;</span>
+        <span> &nbsp; {{ city.description }}, &nbsp;</span>
+        <span>ветер: &nbsp; {{ city.wind }}м/c, &nbsp;</span>
+        <span>осадки: &nbsp; {{ city.precipitation }}мм</span>
+        <span style="cursor:pointer" (click)="deleteLocated(city.id)"
           >&nbsp;&nbsp; x</span
         >
       </li>
     </ul>
   `,
 
-  styleUrls: ["./film.component.scss"],
+  styleUrls: ["./weather.component.scss"],
   providers: [DataService]
 })
-export class FilmComponent implements OnInit {
-  films$: Observable<Film[]>;
+export class WeatherComponent implements OnInit {
+  listCitys$: Observable<Film[]>;
   selected$: Observable<Film>;
   listCity;
   counter;
@@ -48,36 +51,35 @@ export class FilmComponent implements OnInit {
     private store: Store<fromRoot.State>,
     private dataService: DataService
   ) {
-    //this.films$ = store.select(fromRoot.getAllFilms);
-    this.films$ = store.select(fromRoot.getFilms);
-    this.selected$ = store.select(fromRoot.getSelectedFilm);
-    this.listCity = store.source._value.films.films;
+    this.listCitys$ = store.select(fromRoot.getCitys);
+    this.selected$ = store.select(fromRoot.getSelectedCity);
+    this.listCity = store.source._value.citys.citys;
     console.log("this.listCity=", this.listCity);
   }
 
   ngOnInit() {
     this.citys = this.dataService.getData();
     console.log("ngOnInit");
-    this.counter = this.store.select(fromRoot.getAllFilms);
+    this.counter = this.store.select(fromRoot.getAllCity);
   }
 
   onSelect(id: number) {
-    this.store.dispatch(new filmAction.Select(id));
-    console.log("films$-", this.films$);
+    this.store.dispatch(new cityAction.Select(id));
+    console.log("citys$-", this.listCitys$);
   }
-
+  /*
   addCity(locationName) {
     console.log(locationName);
-    this.store.dispatch(new filmAction.AddOne(this.weather));
+    this.store.dispatch(new cityAction.AddOne(this.weather));
     this.locationName = "";
     console.log("store-", this.store.source);
     console.log("listCity=", this.listCity);
 
     console.log("counter=", this.counter);
   }
-
+*/
   deleteLocated(id) {
-    this.store.dispatch(new filmAction.DeleteOne(id));
+    this.store.dispatch(new cityAction.DeleteOne(id));
   }
 
   addLocated(locationName = "Kiev", latitude, longitude) {
@@ -123,9 +125,9 @@ export class FilmComponent implements OnInit {
       this.citys = result;
       console.log("this.citys--", this.citys);
       this.store.dispatch(
-        new filmAction.AddOne({
+        new cityAction.AddOne({
           ids: this.citys.weather.id,
-          films: {
+          citys: {
             id: this.citys.weather.id,
             name: this.citys.weather.name,
             description: this.citys.weather.weather[0].description,
