@@ -12,15 +12,25 @@ import { MatInkBar } from "@angular/material";
   //templateUrl: "./film.component.html",
 
   template: `
-    <p>Enter your location</p>
-    <ul>
-      <li *ngFor="let film of (films$ | async)">
-        <div>{{ film.name }}</div>
-        <div>{{ film.temperature }}</div>
-      </li>
-        <span>Enter your location:</span>
+    <p>
+      <button (click)="geoFindMe()">Find weather my location</button>
+    </p>
+    <div id="out"></div>
+    <span>Enter your location:</span>
     <input type="text" [(ngModel)]="locationName" />
     <button (click)="addLocated(locationName)">Find weather</button>
+    <ul>
+      <li style="list-style-type:none" *ngFor="let film of (films$ | async)">
+        <span>{{ film.name }}, &nbsp;</span>
+        <span> &nbsp; {{ film.temperature }} °С, &nbsp;</span>
+        <span> &nbsp; {{ film.description }}, &nbsp;</span>
+        <span>ветер: &nbsp; {{ film.wind }}м/c, &nbsp;</span>
+        <span>осадки: &nbsp; {{ film.precipitation }}мм</span>
+        <span style="cursor:pointer" (click)="deleteLocated(film.id)"
+          >&nbsp;&nbsp; x</span
+        >
+      </li>
+    </ul>
   `,
 
   styleUrls: ["./film.component.scss"],
@@ -31,8 +41,6 @@ export class FilmComponent implements OnInit {
   selected$: Observable<Film>;
   listCity;
   counter;
-  idNumber: number = 3;
-
   locationName: string;
   citys = {};
 
@@ -68,15 +76,34 @@ export class FilmComponent implements OnInit {
     console.log("counter=", this.counter);
   }
 
-  addLocated(locationName = "Moskva") {
-    console.log(locationName);
-    const loadPromise = new Promise((resolve, reject) => {
-      const keyApi = "&APPID=5baf5448a135ea4bda7e758af88b0136";
-      let url: string =
-        "https://api.openweathermap.org/data/2.5/weather?q=" +
-        locationName +
-        keyApi;
+  deleteLocated(id) {
+    this.store.dispatch(new filmAction.DeleteOne(id));
+  }
 
+  addLocated(locationName = "Kiev", latitude, longitude) {
+    console.log("latitude, longitude=", latitude, longitude);
+    const keyApi = "&APPID=5baf5448a135ea4bda7e758af88b0136";
+    const metric = "&units=metric";
+    const lang = "&lang=ru";
+    let url: string =
+      "https://api.openweathermap.org/data/2.5/weather?q=" +
+      locationName +
+      metric +
+      lang +
+      keyApi;
+    if (latitude) {
+      console.log("пришли координаты", latitude, longitude);
+      url =
+        "https://api.openweathermap.org/data/2.5/weather?lat=" +
+        latitude +
+        "&lon=" +
+        longitude +
+        metric +
+        lang +
+        keyApi;
+    }
+    console.log("url", url);
+    const loadPromise = new Promise((resolve, reject) => {
       const myInit = {
         method: "GET",
         cache: "default"
@@ -99,8 +126,8 @@ export class FilmComponent implements OnInit {
         new filmAction.AddOne({
           ids: this.citys.weather.id,
           films: {
-            id: this.idNumber,
-            name: this.citys.located,
+            id: this.citys.weather.id,
+            name: this.citys.weather.name,
             description: this.citys.weather.weather[0].description,
             temperature: this.citys.weather.main.temp,
             wind: this.citys.weather.wind.speed,
@@ -110,5 +137,36 @@ export class FilmComponent implements OnInit {
       );
       this.locationName = "";
     });
+  }
+
+  geoFindMe() {
+    let latitude;
+    let longitude;
+    const self = this;
+    const output = document.getElementById("out");
+
+    if (!navigator.geolocation) {
+      output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
+      return;
+    }
+
+    function success(position) {
+      latitude = position.coords.latitude.toFixed(2);
+      longitude = position.coords.longitude.toFixed(2);
+
+      output.innerHTML =
+        "<p>Latitude: " + latitude + "°, Longitude: " + longitude + "°</p>";
+
+      console.log("отправка latitude, longitude=", latitude, longitude);
+      self.addLocated(undefined, latitude, longitude);
+    }
+
+    function error() {
+      output.innerHTML = "Unable to retrieve your location";
+    }
+
+    output.innerHTML = "<p>Locating…</p>";
+
+    navigator.geolocation.getCurrentPosition(success, error);
   }
 }

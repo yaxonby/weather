@@ -15,27 +15,27 @@ export const initialState: State = {
     {
       id: 1,
       name: "Minsk",
-      description: `cold`,
+      description: `прохладно`,
       temperature: 5,
-      wind: 10,
-      precipitation: 100
+      wind: 3,
+      precipitation: 20
     },
     {
       id: 2,
       name: "Moskva",
-      description: "very cold",
-      temperature: 5,
-      wind: 10,
-      precipitation: 100
+      description: "облачно",
+      temperature: 3,
+      wind: 5,
+      precipitation: 30
     },
     {
       id: 3,
       name: "Kiev",
-      description: "windy",
+      description: "ветряно",
 
-      temperature: 5,
+      temperature: 4,
       wind: 10,
-      precipitation: 100
+      precipitation: 35
     }
   ],
   selected: null
@@ -93,6 +93,20 @@ export function reducer(state = initialState, action: filmAction.Action) {
         ...state,
         ids: [...state.ids, ids],
         films: [...state.films, films]
+      };
+    }
+
+    case filmAction.DELETE_ONE: {
+      const id = action.payload;
+
+      return {
+        ...state,
+        ids: [...state.ids].filter(function(item, i, arr) {
+          return item.id !== id;
+        }),
+        films: [...state.films].filter(function(item, i, arr) {
+          return item.id !== id;
+        })
       };
     }
 
