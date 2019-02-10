@@ -1,13 +1,19 @@
-<p>Enter your location</p>
+<p>
+  <button (click)="geoFindMe()">Find weather my location</button>
+</p>
+<div id="out"></div>
+<span>Enter your location:</span>
 <input type="text" [(ngModel)]="locationName" />
-<button (click)="addCity(locationName)">Find</button>
-
-<mat-toolbar>Weather app</mat-toolbar>
-<main class="container">
-  <app-film-list
-    [films]="films$ | async"
-    [label]="'Список городов'"
-    (select)="onSelect($event)"
-  ></app-film-list>
-  <app-film-selected [film]="selected$ | async"></app-film-selected>
-</main>
+<button (click)="addLocated(locationName)">Find weather</button>
+<ul>
+  <li style="list-style-type:none" *ngFor="let city of (listCitys$ | async)">
+    <span>{{ city.name }}, &nbsp;</span>
+    <span> &nbsp; {{ city.temperature }} °С, &nbsp;</span>
+    <span> &nbsp; {{ city.description }}, &nbsp;</span>
+    <span>ветер: &nbsp; {{ city.wind }}м/c, &nbsp;</span>
+    <span>осадки: &nbsp; {{ city.precipitation }}мм</span>
+    <span style="cursor:pointer" (click)="deleteLocated(city.id)"
+      >&nbsp;&nbsp; x</span
+    >
+  </li>
+</ul>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
-import { Film } from "./models";
+import { City } from "./models";
 import { Store } from "@ngrx/store";
 import * as fromRoot from "./store/reducers";
 import * as cityAction from "./store/actions/weathers";
@@ -9,43 +9,16 @@ import { MatInkBar } from "@angular/material";
 
 @Component({
   selector: "app-weather",
-  //templateUrl: "./film.component.html",
-
-  template: `
-    <p>
-      <button (click)="geoFindMe()">Find weather my location</button>
-    </p>
-    <div id="out"></div>
-    <span>Enter your location:</span>
-    <input type="text" [(ngModel)]="locationName" />
-    <button (click)="addLocated(locationName)">Find weather</button>
-    <ul>
-      <li
-        style="list-style-type:none"
-        *ngFor="let city of (listCitys$ | async)"
-      >
-        <span>{{ city.name }}, &nbsp;</span>
-        <span> &nbsp; {{ city.temperature }} °С, &nbsp;</span>
-        <span> &nbsp; {{ city.description }}, &nbsp;</span>
-        <span>ветер: &nbsp; {{ city.wind }}м/c, &nbsp;</span>
-        <span>осадки: &nbsp; {{ city.precipitation }}мм</span>
-        <span style="cursor:pointer" (click)="deleteLocated(city.id)"
-          >&nbsp;&nbsp; x</span
-        >
-      </li>
-    </ul>
-  `,
-
+  templateUrl: "./weather.component.html",
   styleUrls: ["./weather.component.scss"],
   providers: [DataService]
 })
 export class WeatherComponent implements OnInit {
-  listCitys$: Observable<Film[]>;
-  selected$: Observable<Film>;
+  listCitys$: Observable<City[]>;
+  selected$: Observable<City>;
   listCity;
-  counter;
   locationName: string;
-  citys = {};
+  citys;
 
   constructor(
     private store: Store<fromRoot.State>,
@@ -53,37 +26,23 @@ export class WeatherComponent implements OnInit {
   ) {
     this.listCitys$ = store.select(fromRoot.getCitys);
     this.selected$ = store.select(fromRoot.getSelectedCity);
-    this.listCity = store.source._value.citys.citys;
-    console.log("this.listCity=", this.listCity);
   }
 
   ngOnInit() {
     this.citys = this.dataService.getData();
     console.log("ngOnInit");
-    this.counter = this.store.select(fromRoot.getAllCity);
   }
 
   onSelect(id: number) {
     this.store.dispatch(new cityAction.Select(id));
     console.log("citys$-", this.listCitys$);
   }
-  /*
-  addCity(locationName) {
-    console.log(locationName);
-    this.store.dispatch(new cityAction.AddOne(this.weather));
-    this.locationName = "";
-    console.log("store-", this.store.source);
-    console.log("listCity=", this.listCity);
 
-    console.log("counter=", this.counter);
-  }
-*/
   deleteLocated(id) {
     this.store.dispatch(new cityAction.DeleteOne(id));
   }
 
   addLocated(locationName = "Kiev", latitude, longitude) {
-    console.log("latitude, longitude=", latitude, longitude);
     const keyApi = "&APPID=5baf5448a135ea4bda7e758af88b0136";
     const metric = "&units=metric";
     const lang = "&lang=ru";
@@ -94,7 +53,6 @@ export class WeatherComponent implements OnInit {
       lang +
       keyApi;
     if (latitude) {
-      console.log("пришли координаты", latitude, longitude);
       url =
         "https://api.openweathermap.org/data/2.5/weather?lat=" +
         latitude +
@@ -104,7 +62,6 @@ export class WeatherComponent implements OnInit {
         lang +
         keyApi;
     }
-    console.log("url", url);
     const loadPromise = new Promise((resolve, reject) => {
       const myInit = {
         method: "GET",

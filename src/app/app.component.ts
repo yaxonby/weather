@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
 
   addLocated(locationName) {
     console.log(locationName);
-    this.dataService.loadData(locationName);
+    //   this.dataService.loadData(locationName);
     this.locationName = "";
   }
 

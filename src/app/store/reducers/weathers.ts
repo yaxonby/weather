@@ -4,16 +4,7 @@ import { City } from "../../models";
 
 export interface State {
   ids: number[];
-  citys: [
-    {
-      id: number;
-      name: string;
-      description: string;
-      temperature: number;
-      wind: number;
-      precipitation: number;
-    }
-  ];
+  citys: City[];
   selected: number;
 }
 
@@ -52,12 +43,10 @@ export const initialState: State = {
 export function reducer(state = initialState, action: cityAction.Action) {
   switch (action.type) {
     case cityAction.ADD_ONE: {
-      const newCity = action.payload;
-      const { ids, citys } = newCity;
-      console.log("newFilm-", newCity);
+      const { ids, citys } = action.payload;
       console.log("citys-", citys);
       console.log("state-", state);
-      console.log("ctalo-", {
+      console.log("cmalo-", {
         ...state,
         ids: [...state.ids, ids],
         citys: [...state.citys, citys]
