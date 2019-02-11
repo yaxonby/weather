@@ -18,7 +18,7 @@ export class WeatherComponent implements OnInit {
   selected$: Observable<City>;
   listCity;
   locationName: string;
-  citys;
+  citysNew;
 
   constructor(
     private store: Store<fromRoot.State>,
@@ -29,7 +29,7 @@ export class WeatherComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.citys = this.dataService.getData();
+    //  this.citys = this.dataService.getData();
     console.log("ngOnInit");
   }
 
@@ -46,7 +46,7 @@ export class WeatherComponent implements OnInit {
     const keyApi = "&APPID=5baf5448a135ea4bda7e758af88b0136";
     const metric = "&units=metric";
     const lang = "&lang=ru";
-    let url: string =
+    let url =
       "https://api.openweathermap.org/data/2.5/weather?q=" +
       locationName +
       metric +
@@ -63,14 +63,15 @@ export class WeatherComponent implements OnInit {
         keyApi;
     }
     const loadPromise = new Promise((resolve, reject) => {
-      const myInit = {
-        method: "GET",
-        cache: "default"
-      };
+      // const myInit = {
+      //   method: "GET",
+      //   cache: "default"
+      // };
       let dataWether;
 
       async function fetchAsync(url) {
-        const dataJson = await fetch(url, myInit);
+        const dataJson = await fetch(url);
+        //const dataJson = await fetch(url, myInit);
         return (dataWether = await dataJson.json());
       }
       fetchAsync(url).then(() => {
@@ -79,18 +80,18 @@ export class WeatherComponent implements OnInit {
       });
     });
     loadPromise.then(result => {
-      this.citys = result;
-      console.log("this.citys--", this.citys);
+      this.citysNew = result;
+      console.log("this.citys--", this.citysNew);
       this.store.dispatch(
         new cityAction.AddOne({
-          ids: this.citys.weather.id,
+          ids: this.citysNew.weather.id,
           citys: {
-            id: this.citys.weather.id,
-            name: this.citys.weather.name,
-            description: this.citys.weather.weather[0].description,
-            temperature: this.citys.weather.main.temp,
-            wind: this.citys.weather.wind.speed,
-            precipitation: this.citys.weather.clouds.all
+            id: this.citysNew.weather.id,
+            name: this.citysNew.weather.name,
+            description: this.citysNew.weather.weather[0].description,
+            temperature: this.citysNew.weather.main.temp,
+            wind: this.citysNew.weather.wind.speed,
+            precipitation: this.citysNew.weather.clouds.all
           }
         })
       );

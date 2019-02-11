@@ -43,18 +43,19 @@ export const initialState: State = {
 export function reducer(state = initialState, action: cityAction.Action) {
   switch (action.type) {
     case cityAction.ADD_ONE: {
-      const { ids, citys } = action.payload;
-      console.log("citys-", citys);
-      console.log("state-", state);
-      console.log("cmalo-", {
-        ...state,
-        ids: [...state.ids, ids],
-        citys: [...state.citys, citys]
-      });
+      const newCity = <any>action.payload;
+      //const { ids, citys } = newFilm;
+      //console.log("citys-", citys);
+      //console.log("state-", state);
+      // console.log("cmalo-", {
+      //   ...state,
+      //  ids: [...state.ids, newFilm.ids],
+      //   citys: [...state.citys, newFilm.citys]
+      // });
       return {
         ...state,
-        ids: [...state.ids, ids],
-        citys: [...state.citys, citys]
+        ids: [...state.ids, newCity.ids],
+        citys: [...state.citys, newCity.citys]
       };
     }
 
@@ -63,22 +64,18 @@ export function reducer(state = initialState, action: cityAction.Action) {
 
       return {
         ...state,
-        ids: [...state.ids].filter(function(item, i, arr) {
-          return item.id !== id;
-        }),
-        citys: [...state.citys].filter(function(item, i, arr) {
-          return item.id !== id;
-        })
+        //       ids: [...state.ids].filter((item: number, i, arr) => item.id !== id),
+        citys: [...state.citys].filter((item, i, arr) => item.id !== id)
       };
     }
 
-    case cityAction.SELECT: {
-      const id = action.payload;
-      return {
-        ...state,
-        selected: id
-      };
-    }
+    //  case cityAction.SELECT: {
+    //    const id = action.payload;
+    //    return {
+    //      ...state,
+    //     selected: id
+    //   };
+    // }
 
     default:
       return state;

@@ -20,7 +20,8 @@ export class DeleteOne implements Action {
 export class AddOne implements Action {
   readonly type = ADD_ONE;
 
-  constructor(public payload: City) {}
+  //constructor(public payload: City) {}
+  constructor(public payload) {}
 }
 
 export type Action = AddOne | DeleteOne;
